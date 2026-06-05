@@ -1,15 +1,16 @@
+from dataclasses import dataclass
 
 
+@dataclass
 class Item:
-    def __init__(self, product_name: str, quantity: int, price: int) -> None:
-        self.product_name = product_name
-        self.quantity = quantity
-        self.price = price
+    product_name: str
+    quantity: int
+    price: int
 
 
+@dataclass
 class Cart:
-    def __init__(self, items: list[Item]) -> None:
-        self.items = items
+    items: list[Item]
 
     def total_price(self) -> int:
         '''Вохвращает полную стоимость товаров в корзине.'''
@@ -17,10 +18,9 @@ class Cart:
 
     def add_item(self, item: Item) -> None:
         '''Если такой Item уже есть, то нужно увеличить его кол-во, если цены разные то нужно упасть.'''
-        n = 0
         for item1 in self.items:
             if item1.product_name == item.product_name:
-                n = 1
+                # TODO: Нужен тест на ошибку
                 if item1.price != item.price:
                     raise ValueError(
                         f"Несовпадение цен '{item1.product_name}': "
@@ -29,9 +29,9 @@ class Cart:
                     )
                 item1.quantity += item.quantity
                 return
-        if n > 0:
-            self.items.append(item)
+        self.items.append(item)
 
+    # TODO: Написать тесты
     def remove_item(self, item: Item) -> None:
         '''Если Item не обнаружен, упасть, иначе удалить его из корзины.'''
         n = 0
